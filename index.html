@@ -10,7 +10,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f1f1;
+            background: url('https://www.example.com/path_to_your_image.jpg') no-repeat center center/cover;
             height: 100vh;
             margin: 0;
             text-align: center;
@@ -23,9 +23,16 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             width: 80%;
             max-width: 500px;
+            position: relative;
         }
         h1 {
             color: #e63946;
+            animation: shake 0.5s ease-in-out infinite;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
         .buttons {
             margin-top: 20px;
@@ -48,15 +55,15 @@
             display: none;
             margin-top: 20px;
             font-size: 1.1em;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Xin lỗi em yêu ❤️</h1>
-        <p>Anh biết mình đã sai. Em có thể tha lỗi cho anh không?moaaa
-        
-        </p>
+        <p>Anh biết mình đã sai. Em có thể tha lỗi cho anh không? Moa moa!</p>
         <div class="buttons">
             <button class="button" onclick="showMessage()">Tha Lỗi</button>
             <button class="button" id="noButton" onclick="moveButton()">Không</button>
@@ -64,18 +71,33 @@
         <p id="message">Cảm ơn em đã tha lỗi cho anh! chụt chụt❤️</p>
     </div>
 
+    <!-- Thêm âm thanh vào trang -->
+    <audio id="apologySound" src="https://www.example.com/path_to_your_sound.mp3"></audio>
+
     <script>
         function showMessage() {
-            document.getElementById('message').style.display = 'block';
+            const message = document.getElementById('message');
+            message.style.display = 'block';
+            document.getElementById('apologySound').play();
+
+            // Hiệu ứng hiện dần cho tin nhắn
+            let opacity = 0;
+            const fadeIn = setInterval(() => {
+                if (opacity < 1) {
+                    opacity += 0.1;
+                    message.style.opacity = opacity;
+                } else {
+                    clearInterval(fadeIn);
+                }
+            }, 50);
         }
 
         function moveButton() {
             const button = document.getElementById('noButton');
-            const container = document.querySelector('.container');
             
-            // Tạo vị trí ngẫu nhiên trong khung giới hạn của container
-            const maxX = container.offsetWidth - button.offsetWidth;
-            const maxY = container.offsetHeight - button.offsetHeight;
+            // Tạo vị trí ngẫu nhiên trong toàn màn hình
+            const maxX = window.innerWidth - button.offsetWidth;
+            const maxY = window.innerHeight - button.offsetHeight;
             const randomX = Math.floor(Math.random() * maxX);
             const randomY = Math.floor(Math.random() * maxY);
             
